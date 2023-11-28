@@ -1,18 +1,31 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useQuery } from "react-query";
 
-export const Home = () => {
-  // You can change the api link according to what you want
+interface HomeProps {
+  searchTerm: number;
+  setSearchTerm: React.Dispatch<React.SetStateAction<number>>;
+}
 
-  // const { data: fecthData } = useQuery("dataCache", async () => {
-  //   try {
-  //     const response = await axios.get(`your api`);
-  //     return setDatas(response.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // });
+export const Home: React.FC<HomeProps> = ({ searchTerm, setSearchTerm }) => {
+  setSearchTerm(1);
+  console.log(searchTerm);
 
-  const [state, setState] = React.useState<number>(0);
+  const { data, isLoading } = useQuery("dataCache", async () => {
+    try {
+      const response = await axios.get(`/test`);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  });
+  if (isLoading) {
+    return <div>loading ....</div>;
+  }
+
+  console.log(data);
+
+  const [state, setState] = useState<number>(0);
   const count = () => {
     if (state >= 10) {
       return alert("maximum capacity");
